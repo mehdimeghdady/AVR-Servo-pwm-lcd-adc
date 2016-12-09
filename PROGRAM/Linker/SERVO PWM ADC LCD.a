@@ -1,0 +1,278 @@
+;/*****************************************************
+;This program was produced by the
+;CodeWizardAVR V2.05.3 Standard
+;Automatic Program Generator
+;© Copyright 1998-2011 Pavel Haiduc, HP InfoTech s.r.l.
+;http://www.hpinfotech.com
+;
+;Project :
+;Version :
+;Date    : 3/9/2015
+;Author  : MEM
+;Company :
+;Comments:
+;
+;
+;Chip type               : ATmega32
+;Program type            : Application
+;AVR Core Clock frequency: 16.000000 MHz
+;Memory model            : Small
+;External RAM size       : 0
+;Data Stack size         : 512
+;*****************************************************/
+;
+;#include <mega32.h>
+;PCODE: $00000000 VOL: 0
+	#ifndef __SLEEP_DEFINED__
+;PCODE: $00000001 VOL: 0
+	#define __SLEEP_DEFINED__
+;PCODE: $00000002 VOL: 0
+	.EQU __se_bit=0x80
+;PCODE: $00000003 VOL: 0
+	.EQU __sm_mask=0x70
+;PCODE: $00000004 VOL: 0
+	.EQU __sm_powerdown=0x20
+;PCODE: $00000005 VOL: 0
+	.EQU __sm_powersave=0x30
+;PCODE: $00000006 VOL: 0
+	.EQU __sm_standby=0x60
+;PCODE: $00000007 VOL: 0
+	.EQU __sm_ext_standby=0x70
+;PCODE: $00000008 VOL: 0
+	.EQU __sm_adc_noise_red=0x10
+;PCODE: $00000009 VOL: 0
+	.SET power_ctrl_reg=mcucr
+;PCODE: $0000000A VOL: 0
+	#endif
+;PCODE: $0000000B VOL: 0
+;PCODE: $0000000C VOL: 0
+;
+;#include <delay.h>
+;#include <stdio.h>
+;// Alphanumeric LCD functions
+;#include <alcd.h>
+;
+;#define ADC_VREF_TYPE 0x40
+;
+;// Read the AD conversion result
+;unsigned int read_adc(unsigned char adc_input)
+; 0000 0023 {
+
+	.CSEG
+;PCODE: $0000000D VOL: 0
+;PCODE: $0000000E VOL: 0
+; 0000 0024 ADMUX=adc_input | (ADC_VREF_TYPE & 0xff);
+;PCODE: $0000000F VOL: 0
+;	adc_input -> Y+0
+;PCODE: $00000010 VOL: 0
+;PCODE: $00000011 VOL: 0
+;PCODE: $00000012 VOL: 0
+; 0000 0025 // Delay needed for the stabilization of the ADC input voltage
+; 0000 0026 delay_us(10);
+;PCODE: $00000013 VOL: 0
+; 0000 0027 // Start the AD conversion
+; 0000 0028 ADCSRA|=0x40;
+;PCODE: $00000014 VOL: 0
+;PCODE: $00000015 VOL: 0
+; 0000 0029 // Wait for the AD conversion to complete
+; 0000 002A while ((ADCSRA & 0x10)==0);
+;PCODE: $00000016 VOL: 0
+;PCODE: $00000017 VOL: 0
+;PCODE: $00000018 VOL: 0
+;PCODE: $00000019 VOL: 0
+;PCODE: $0000001A VOL: 0
+;PCODE: $0000001B VOL: 0
+; 0000 002B ADCSRA|=0x10;
+;PCODE: $0000001C VOL: 0
+;PCODE: $0000001D VOL: 0
+; 0000 002C return ADCW;
+;PCODE: $0000001E VOL: 0
+;PCODE: $0000001F VOL: 0
+;PCODE: $00000020 VOL: 0
+; 0000 002D }
+;PCODE: $00000021 VOL: 0
+;
+;// Declare your global variables here
+;
+;void main(void)
+; 0000 0032 {
+;PCODE: $00000022 VOL: 0
+; 0000 0033  char lcdi[10],lcdj[10];
+; 0000 0034 unsigned int i;
+; 0000 0035 unsigned int j;
+; 0000 0036 PORTA=0x00;
+;PCODE: $00000023 VOL: 0
+;	lcdi -> Y+10
+;	lcdj -> Y+0
+;	i -> R16,R17
+;	j -> R18,R19
+;PCODE: $00000024 VOL: 0
+;PCODE: $00000025 VOL: 0
+; 0000 0037 DDRA=0x00;
+;PCODE: $00000026 VOL: 0
+;PCODE: $00000027 VOL: 0
+; 0000 0038 PORTB=0x00;
+;PCODE: $00000028 VOL: 0
+;PCODE: $00000029 VOL: 0
+; 0000 0039 DDRB=0xff;
+;PCODE: $0000002A VOL: 0
+;PCODE: $0000002B VOL: 0
+; 0000 003A PORTC=0x00;
+;PCODE: $0000002C VOL: 0
+;PCODE: $0000002D VOL: 0
+; 0000 003B DDRC=0x00;
+;PCODE: $0000002E VOL: 0
+;PCODE: $0000002F VOL: 0
+; 0000 003C PORTD=0x00;
+;PCODE: $00000030 VOL: 0
+;PCODE: $00000031 VOL: 0
+; 0000 003D DDRD=0xff;
+;PCODE: $00000032 VOL: 0
+;PCODE: $00000033 VOL: 0
+; 0000 003E 
+; 0000 003F // Timer/Counter 1 initialization
+; 0000 0040 // Clock source: System Clock
+; 0000 0041 // Clock value: 2000.000 kHz
+; 0000 0042 // Mode: Ph. & fr. cor. PWM top=ICR1
+; 0000 0043 // OC1A output: Non-Inv.
+; 0000 0044 // OC1B output: Discon.
+; 0000 0045 // Noise Canceler: Off
+; 0000 0046 // Input Capture on Falling Edge
+; 0000 0047 TCCR1A=0x80;
+;PCODE: $00000034 VOL: 0
+;PCODE: $00000035 VOL: 0
+; 0000 0048 TCCR1B=0x12;
+;PCODE: $00000036 VOL: 0
+;PCODE: $00000037 VOL: 0
+; 0000 0049 TCNT1H=0x00;
+;PCODE: $00000038 VOL: 0
+;PCODE: $00000039 VOL: 0
+; 0000 004A TCNT1L=0x00;
+;PCODE: $0000003A VOL: 0
+;PCODE: $0000003B VOL: 0
+; 0000 004B ICR1H=0x4E;
+;PCODE: $0000003C VOL: 0
+;PCODE: $0000003D VOL: 0
+; 0000 004C ICR1L=0x20;
+;PCODE: $0000003E VOL: 0
+;PCODE: $0000003F VOL: 0
+; 0000 004D OCR1A=1000;
+;PCODE: $00000040 VOL: 0
+;PCODE: $00000041 VOL: 0
+; 0000 004E 
+; 0000 004F // ADC initialization
+; 0000 0050 // ADC Clock frequency: 1000.000 kHz
+; 0000 0051 // ADC Voltage Reference: AVCC pin
+; 0000 0052 ADMUX=ADC_VREF_TYPE & 0xff;
+;PCODE: $00000042 VOL: 0
+;PCODE: $00000043 VOL: 0
+; 0000 0053 ADCSRA=0x84;
+;PCODE: $00000044 VOL: 0
+;PCODE: $00000045 VOL: 0
+; 0000 0054 
+; 0000 0055 
+; 0000 0056 
+; 0000 0057 // Alphanumeric LCD initialization
+; 0000 0058 // Connections are specified in the
+; 0000 0059 // Project|Configure|C Compiler|Libraries|Alphanumeric LCD menu:
+; 0000 005A // RS - PORTB Bit 0
+; 0000 005B // RD - PORTB Bit 1
+; 0000 005C // EN - PORTB Bit 2
+; 0000 005D // D4 - PORTB Bit 4
+; 0000 005E // D5 - PORTB Bit 5
+; 0000 005F // D6 - PORTB Bit 6
+; 0000 0060 // D7 - PORTB Bit 7
+; 0000 0061 // Characters/line: 16
+; 0000 0062 lcd_init(16);
+;PCODE: $00000046 VOL: 0
+;PCODE: $00000047 VOL: 0
+; 0000 0063 
+; 0000 0064 while (1)
+;PCODE: $00000048 VOL: 0
+; 0000 0065       {
+; 0000 0066 
+; 0000 0067       i=read_adc(0);
+;PCODE: $00000049 VOL: 0
+;PCODE: $0000004A VOL: 0
+;PCODE: $0000004B VOL: 0
+; 0000 0068       j=i*3;
+;PCODE: $0000004C VOL: 0
+;PCODE: $0000004D VOL: 0
+;PCODE: $0000004E VOL: 0
+; 0000 0069       if (j<500)
+;PCODE: $0000004F VOL: 0
+;PCODE: $00000050 VOL: 0
+;PCODE: $00000051 VOL: 0
+; 0000 006A       j=500;
+;PCODE: $00000052 VOL: 0
+;PCODE: $00000053 VOL: 0
+; 0000 006B       if (j>2400)
+;PCODE: $00000054 VOL: 0
+;PCODE: $00000055 VOL: 0
+;PCODE: $00000056 VOL: 0
+;PCODE: $00000057 VOL: 0
+; 0000 006C       j=2400;
+;PCODE: $00000058 VOL: 0
+;PCODE: $00000059 VOL: 0
+; 0000 006D       OCR1A=j;
+;PCODE: $0000005A VOL: 0
+;PCODE: $0000005B VOL: 0
+;PCODE: $0000005C VOL: 0
+; 0000 006E       sprintf(lcdj,"m=%u ",j);
+;PCODE: $0000005D VOL: 0
+;PCODE: $0000005E VOL: 0
+;PCODE: $0000005F VOL: 0
+;PCODE: $00000060 VOL: 0
+;PCODE: $00000061 VOL: 0
+;PCODE: $00000062 VOL: 0
+;PCODE: $00000063 VOL: 0
+;PCODE: $00000064 VOL: 0
+;PCODE: $00000065 VOL: 0
+;PCODE: $00000066 VOL: 0
+;PCODE: $00000067 VOL: 0
+;PCODE: $00000068 VOL: 0
+; 0000 006F        //OCR1A=i;
+; 0000 0070        lcd_gotoxy(0,0);
+;PCODE: $00000069 VOL: 0
+;PCODE: $0000006A VOL: 0
+;PCODE: $0000006B VOL: 0
+;PCODE: $0000006C VOL: 0
+; 0000 0071        lcd_puts(lcdj);
+;PCODE: $0000006D VOL: 0
+;PCODE: $0000006E VOL: 0
+; 0000 0072        sprintf(lcdi,"v=%u ",i);
+;PCODE: $0000006F VOL: 0
+;PCODE: $00000070 VOL: 0
+;PCODE: $00000071 VOL: 0
+;PCODE: $00000072 VOL: 0
+;PCODE: $00000073 VOL: 0
+;PCODE: $00000074 VOL: 0
+;PCODE: $00000075 VOL: 0
+;PCODE: $00000076 VOL: 0
+;PCODE: $00000077 VOL: 0
+;PCODE: $00000078 VOL: 0
+;PCODE: $00000079 VOL: 0
+;PCODE: $0000007A VOL: 0
+; 0000 0073        //OCR1A=i;
+; 0000 0074        lcd_gotoxy(0,1);
+;PCODE: $0000007B VOL: 0
+;PCODE: $0000007C VOL: 0
+;PCODE: $0000007D VOL: 0
+;PCODE: $0000007E VOL: 0
+; 0000 0075        lcd_puts(lcdi);
+;PCODE: $0000007F VOL: 0
+;PCODE: $00000080 VOL: 0
+; 0000 0076        lcd_clear();
+;PCODE: $00000081 VOL: 0
+; 0000 0077        delay_ms(1);
+;PCODE: $00000082 VOL: 0
+;PCODE: $00000083 VOL: 0
+;PCODE: $00000084 VOL: 0
+; 0000 0078       }
+;PCODE: $00000085 VOL: 0
+;PCODE: $00000086 VOL: 0
+; 0000 0079 }
+;PCODE: $00000087 VOL: 0
+;PCODE: $00000088 VOL: 0
+;PCODE: $00000089 VOL: 0
+;PCODE: $0000008A VOL: 0
